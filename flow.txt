@@ -1,0 +1,8 @@
+user ---> fullname, username, password, gender, profilePic, friends:[], friendRequests:[]
+/signup, /signin, /signout, /get-users, /add-friend, /accept-friend, /update-user, /delete-user
+
+message ---> senderId, receiverId, message
+/create, /update, /delete,
+
+conversation ---> participants:[], messages:[]
+/get-messages, 
