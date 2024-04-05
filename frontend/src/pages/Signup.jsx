@@ -32,7 +32,7 @@ const Signup = () => {
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
-        <button className='btn btn-primary btn-block mt-2' disabled={loading}>
+        <button type="submit" className='btn btn-primary btn-block mt-2' >
 							{loading ? <span className='loading loading-spinner '></span> : "Sing Up"}
 						</button>
         <p className="text-sm text-slate-400">

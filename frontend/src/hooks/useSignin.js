@@ -36,7 +36,12 @@ const useSignin = () => {
 			setAuthUser(data);
             navigate('/')
 		} catch (error) {
-			toast.error(error.message);
+			toast.error(error.message, {
+                position: "top-center",
+                autoClose: 3000,
+                theme: "dark",
+                draggable: true
+            });
 		} finally {
 			setLoading(false);
 		}

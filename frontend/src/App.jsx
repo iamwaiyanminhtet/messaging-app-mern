@@ -5,11 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
-import { useAuthContext } from "./context/AuthContext";
 
 const App = () => {
-
-
   return (
     <div>
       <BrowserRouter>

@@ -7,7 +7,7 @@ export const getUsers = async (req, res, next) => {
     try {
         const currentUserId = req.user.userId;
 
-        const users = await User.find().select('-password');
+        const users = await User.find({ _id: { $ne: currentUserId } }).select('-password');
         // { _id: { $ne: currentUserId } }
 
         res.status(200).json(users);

@@ -65,4 +65,5 @@ function validationCheck({ fullname, username, password, confirmPassword, gender
         });
         return false;
     }
+    return true;
 }
