@@ -23,5 +23,14 @@ A typical messaging site with MERN and socket.io
 - Expressjs
 - MongoDB (Mongoose, Atlas)
 
+### .env
+in backend (root folder)
+
+```
+PORT
+MONGODB_URI
+JWT_SECRET_KEY
+```
+
 ## Hosting
 - [Render] (https://render.com/)
