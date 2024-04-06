@@ -25,7 +25,7 @@ const Signin = () => {
         </button>
         <p className="text-sm text-slate-400">
           {`don't have an account?`}
-          <Link className="font-semibold ms-2" to={'/signup'}>Sign In</Link>
+          <Link className="font-semibold ms-2" to={'/signup'}>Sign Up</Link>
         </p>
       </form>
     </div>

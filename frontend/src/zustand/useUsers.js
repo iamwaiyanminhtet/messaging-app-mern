@@ -4,7 +4,9 @@ const useUsers = create((set) => ({
     sampleUsers : [],
     setSampleUsers : (sampleUsers) => set({ sampleUsers }),
     curUserFriends : [],
-    setCurUserFriends : (friends) => set({friends}) 
+    setCurUserFriends : (curUserFriends) => set({curUserFriends}),
+    messages : [],
+    setMessages : (messages) => set({messages}),
 }));
 
 export default useUsers;
