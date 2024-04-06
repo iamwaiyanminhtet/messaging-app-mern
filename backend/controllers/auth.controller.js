@@ -36,6 +36,8 @@ export const signup = async (req, res, next) => {
             username : user.username,
             gender : user.gender,
             profilePic : user.profilePic,
+            friends : user.friends,
+            friendRequests : user.friendRequests
         });
 
     } catch (error) {
@@ -77,6 +79,8 @@ export const signin = async (req, res, next) => {
             username : user.username,
             gender : user.gender,
             profilePic : user.profilePic,
+            friends : user.friends,
+            friendRequests : user.friendRequests
         });
     } catch (error) {
         next(error)

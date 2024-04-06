@@ -20,8 +20,7 @@ const useSendMessage = () => {
 			if (data.success === false) {
                 throw new Error(data.message);
             }
-
-            if(messages?.length > 0) {
+			if(messages?.length > 0) {
 				setMessages([...messages, data])
 			} else {
 				setMessages([data])

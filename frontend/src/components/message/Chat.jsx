@@ -32,10 +32,12 @@ const Chat = () => {
     if (username) getUser();
   }, [username]);
 
-  const { loading:messageLoading, messages, getMessages, conversationId } = useGetMessages();
+  const { loading: messageLoading, messages, getMessages, conversationId } = useGetMessages();
+  
   useEffect(() => {
     if (user._id) getMessages(user._id)
   }, [user]);
+
 
   return (
     <div className="min-h-screen flex justify-center items-center text-slate-100 p-5 sm:p-0 sm:py-5">
@@ -47,11 +49,11 @@ const Chat = () => {
           </div>
         }
         {
-          !loading && user && 
+          !loading && user &&
           <>
-          <ChatUser user={user} convoId={conversationId} />
-          <Messages user={user} loading={messageLoading} messages={messages} />
-          <MessageInput user={user} />
+            <ChatUser user={user} convoId={conversationId} />
+            <Messages user={user} loading={messageLoading} messages={messages} />
+            <MessageInput user={user}  />
           </>
         }
       </div>

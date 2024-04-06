@@ -2,6 +2,7 @@ import { BsSend, BsTrash } from "react-icons/bs"
 import useSendMessage from "../../hooks/useSendMessage"
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
+import sendNotification from "../../assets/send.mp3"
 
 const MessageInput = ({user}) => {
 
@@ -11,19 +12,21 @@ const MessageInput = ({user}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!message || message === '') {
-            toast.warning('Type a message', {
-                position: "top-center",
-                autoClose: 3000,
-                theme: "dark",
-                draggable: true
-            });
-            return messageRef.current.focus();
+        if (!message || message === '') {
+          toast.warning('Type a message', {
+            position: "top-center",
+            autoClose: 3000,
+            theme: "dark",
+            draggable: true
+          });
+          return messageRef.current.focus();
         }
-
+    
         await sendMessage(message, user._id);
+        const sendNoti = new Audio(sendNotification);
+        sendNoti.play();
         setMessage('')
-    }
+      }
 
     return (
         <form className='px-4 my-3' onSubmit={handleSubmit} >

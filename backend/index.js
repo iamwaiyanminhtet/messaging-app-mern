@@ -6,12 +6,12 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/users.routes.js";
 import messageRoutes from "./routes/messages.routes.js";
+import { app, server } from "./socket/socket.js";
 
 dotenv.config();
-const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     mongoose.connect(process.env.MONGODB_URI).then(() => console.log('connect to mongodb')).catch(error => console.log(error));
     console.log(`server running on port : ${PORT}`);
 });
