@@ -6,7 +6,7 @@ A typical messaging site with MERN and socket.io
 - realtime messages
 
 ## Demo
-[Messagin site demo]()
+[Messagin site demo](https://messaging-app-wymh.onrender.com)
 
 ## Screenshots
 
