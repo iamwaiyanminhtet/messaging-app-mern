@@ -2,11 +2,45 @@ import LogoutButton from "../components/user/LogoutButton";
 import SidebarSearch from "../components/user/SidebarSearch"
 import SidebarUser from "../components/user/SidebarUser"
 import useGetUsers from "../hooks/useGetUsers"
+import useUsers from "../zustand/useUsers";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import useListenFriendRequest, { useListenFriendAccept } from "../hooks/useListenFriendRequestAndAccept";
+import { useAuthContext } from "../context/AuthContext";
 
 const Home = () => {
 
-  const { loading, users } = useGetUsers();
-  
+  // request a friend socketio emit
+  const response = useListenFriendRequest();
+  const { setAuthUser } = useAuthContext();
+  useEffect(() => {
+    if (response) {
+      setAuthUser(response.user)
+      toast.info(`${response.message}, Please refresh the page to accept the request!`, {
+        position: "top-center",
+        autoClose: 5000,
+        theme: "dark",
+        draggable: true
+      });
+    }
+  }, [response, setAuthUser]);
+
+  const { acceptResponse } = useListenFriendAccept();
+  useEffect(() => {
+    if (acceptResponse) {
+      setAuthUser(acceptResponse.user)
+      toast.info(`${acceptResponse.message}, Please refresh the page to see friend icon!`, {
+        position: "top-center",
+        autoClose: 5000,
+        theme: "dark",
+        draggable: true
+      });
+    }
+  }, [acceptResponse, setAuthUser]);
+
+  const { loading } = useGetUsers();
+  const { sidebarUsers } = useUsers();
+
   return (
     <div className="min-h-screen  flex justify-center items-center text-slate-100 p-5 sm:p-0">
       <div className=" w-full sm:w-1/2 sm:max-w-3xl bg-gray-800 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-40 border border-gray-700 px-5 py-3 flex flex-col gap-5">
@@ -15,8 +49,8 @@ const Home = () => {
         </div>
         <div className="flex flex-col max-h-[calc(75vh)] overflow-auto gap-2">
           {
-            !loading && users.length > 0 &&
-            users.map(user => <SidebarUser key={user._id} user={user} />)
+            !loading && sidebarUsers.length > 0 &&
+            sidebarUsers.map(user => <SidebarUser key={user._id} user={user} />)
           }
         </div>
         {
@@ -25,7 +59,7 @@ const Home = () => {
             <span className="loading loading-spinner text-info loading-lg"></span>
           </div>
         }
-        <LogoutButton/>
+        <LogoutButton />
       </div>
     </div>
   )

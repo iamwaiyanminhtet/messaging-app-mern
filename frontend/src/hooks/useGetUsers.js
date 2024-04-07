@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import useUsers from "../zustand/useUsers";
 
 const useGetUsers = () => {
 
     const [loading, setLoading] = useState(false);
-    const [users, setUsers] = useState([]);
+    const { setSidebarUsers} = useUsers();
 
     useEffect(() => {
         setLoading(true)
@@ -16,7 +17,7 @@ const useGetUsers = () => {
                 if (data.success === false) {
                     throw new Error(data.message);
                 }
-                setUsers(data);
+                setSidebarUsers(data);
             } catch (error) {
                 toast.error(error.message);
             } finally {
@@ -26,7 +27,7 @@ const useGetUsers = () => {
         getUsers()
     }, [])
 
-    return { loading, users };
+    return { loading };
 }
 
 export default useGetUsers;

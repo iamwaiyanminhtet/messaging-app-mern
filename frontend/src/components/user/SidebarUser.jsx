@@ -12,32 +12,32 @@ import useFriendAccept from "../../hooks/useFriendAccept";
 
 const SidebarUser = ({ user }) => {
 
-    const {authUser} = useAuthContext();
+    const { authUser } = useAuthContext();
     const navigate = useNavigate();
     const goToChat = () => {
         navigate(`/chat/${user.username}`);
     }
-    
-    const {onlineUsers} = useSocketContext();
+
+    const { onlineUsers } = useSocketContext();
     const isOnline = onlineUsers?.includes(user._id);
 
-    const { loading : friendReqLoading, sendFriendRequest } = useFriendRequest();
-    const { loading :acceptFriendLoading, acceptFriendRequest } = useFriendAccept();
+    const { loading: friendReqLoading, sendFriendRequest } = useFriendRequest();
+    const { loading: acceptFriendLoading, acceptFriendRequest } = useFriendAccept();
 
     const [hasAlreadyFriendRequest, setHasAlreadyFriendRequest] = useState(user?.friendRequests?.includes(authUser._id));
     const [hasFriendRequestToCurUser, setHasFriendRequestToCurUser] = useState(authUser?.friendRequests?.includes(user._id));
-    const [alreadyFriend, setAlreadyFriend] = useState(authUser?.friends?.includes(user._id) || user?.friends?.includes(authUser._id) );
+    const [alreadyFriend, setAlreadyFriend] = useState(authUser?.friends?.includes(user._id) || user?.friends?.includes(authUser._id));
 
     const handleAddFriend = async () => {
         const success = await sendFriendRequest(user._id);
-        if(success) {
+        if (success) {
             setHasAlreadyFriendRequest(true)
         }
     }
 
     const handleAcceptFriend = async () => {
         const success = await acceptFriendRequest(user._id);
-        if(success) {
+        if (success) {
             setAlreadyFriend(true)
         }
     }
@@ -60,24 +60,23 @@ const SidebarUser = ({ user }) => {
                 <div className="flex gap-3 items-center">
                     <div>
                         {
-                            (friendReqLoading || acceptFriendLoading) && 
+                            (friendReqLoading || acceptFriendLoading) &&
                             <div className="loading loading-spinner"></div>
                         }
                         {
-                            !friendReqLoading && !acceptFriendLoading &&!hasAlreadyFriendRequest && !hasFriendRequestToCurUser && 
-                            !alreadyFriend && 
+                            !friendReqLoading && !acceptFriendLoading && !hasAlreadyFriendRequest && !hasFriendRequestToCurUser &&
+                            !alreadyFriend &&
                             <FaUserPlus size={25} onClick={handleAddFriend} />
                         }
                         {
-                            !friendReqLoading && !acceptFriendLoading && hasAlreadyFriendRequest && 
-                            !hasFriendRequestToCurUser && 
+                            !friendReqLoading && !acceptFriendLoading && hasAlreadyFriendRequest &&
+                            !hasFriendRequestToCurUser &&
                             !alreadyFriend &&
-                            <RiUserShared2Fill size={25}  />
+                            <RiUserShared2Fill size={25} />
                         }
                         {
-                            !friendReqLoading && !acceptFriendLoading && hasFriendRequestToCurUser && 
-                            !alreadyFriend && 
-                            !hasAlreadyFriendRequest && 
+                            !friendReqLoading && !acceptFriendLoading && hasFriendRequestToCurUser &&
+                            !alreadyFriend &&
                             <FaUserCheck size={25} onClick={handleAcceptFriend} />
                         }
                         {

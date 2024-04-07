@@ -4,6 +4,7 @@ A typical messaging site with MERN and socket.io
 ## Features
 - normal user authentication
 - realtime messages
+- realtime add/accept friend
 
 ## Demo
 [Messagin site demo](https://messaging-app-wymh.onrender.com)

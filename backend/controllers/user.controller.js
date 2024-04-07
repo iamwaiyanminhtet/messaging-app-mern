@@ -2,6 +2,7 @@ import bcryptjs from "bcryptjs";
 import { validationResult } from "express-validator";
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/custom-error.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const getUsers = async (req, res, next) => {
     try {
@@ -21,7 +22,8 @@ export const addFriend = async (req, res, next) => {
         const currentUserId = req.user.userId;
         const toUserId = req.params.toUserId;
 
-        const toUser = await User.findById(toUserId);
+        const toUser = await User.findById(toUserId).select('-password');
+        const currentUser = await User.findById(currentUserId);
         const isAlreadySentFriReq = toUser?.friendRequests?.includes(currentUserId);
 
         if (!toUser) {
@@ -35,6 +37,10 @@ export const addFriend = async (req, res, next) => {
         toUser.friendRequests.push(currentUserId);
         await toUser.save();
         
+        const toUserSocketId = getReceiverSocketId(toUserId);
+        if(toUserSocketId) {
+            io.to(toUserSocketId).emit('friend-request' ,{ message: `You have a new friend request from ${currentUser.fullname}`, user : toUser });
+        }
 
         res.status(200).json({ message: `Friend requests has sent to ${toUser.fullname}` });
     } catch (error) {
@@ -61,6 +67,10 @@ export const acceptFriend = async (req, res, next) => {
         toUser.friends.push(currentUserId);
         await Promise.all[currentUser.save(), toUser.save()];
 
+        const fromUserSocketId = getReceiverSocketId(fromUserId);
+        if(fromUserSocketId) {
+            io.to(fromUserSocketId).emit('accept-friend' ,{ message: `${currentUser.fullname} has accepted your friend request.`, user : toUser });
+        }
 
         res.status(200).json({ message: `You've accpeted friend request from ${toUser.fullname}`, user : currentUser });
     } catch (error) {
