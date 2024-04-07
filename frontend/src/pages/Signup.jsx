@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useSignup from "../hooks/useSignup";
+import Header from "../components/Header";
 
 const Signup = () => {
 
@@ -15,6 +16,7 @@ const Signup = () => {
   return (
     <div className="min-h-screen  flex justify-center items-center text-slate-100 p-3">
       <form onSubmit={handleSubmit} className=" bg-gray-800 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-40 border border-gray-700 p-20 flex flex-col gap-3">
+        <Header/>
         <div>
           <input type="text" id="fullname" placeholder="Fullname" className="input input-bordered input-primary w-full max-w-xs" 
           onChange={(e) => setFormData({...formData, [e.target.id] : e.target.value}) } />

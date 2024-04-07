@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useListenFriendRequest, { useListenFriendAccept } from "../hooks/useListenFriendRequestAndAccept";
 import { useAuthContext } from "../context/AuthContext";
+import useListenUpdateUser from "../hooks/useListenUpdateUser";
+import Header from "../components/Header";
 
 const Home = () => {
 
@@ -38,21 +40,10 @@ const Home = () => {
     }
   }, [acceptResponse, setAuthUser]);
 
+  useListenUpdateUser();
   const { loading } = useGetUsers();
   const { sidebarUsers } = useUsers();
   const [filterUser, setFilterUser] = useState([]);
-  // const searchUser = (username) => {
-  //   console.log('username')
-  //   console.log(username)
-  //   if (!username || username === '') {
-  //     setFilterUser(sidebarUsers)
-  //     return;
-  //   } else {
-  //     setFilterUser(sidebarUsers.filter(sb => {
-  //       return sb.fullname.toLowerCase().includes(username.toLowerCase()) || sb.fullname.split(' ').join('').toLowerCase().includes(username.toLowerCase())
-  //     }))
-  //   }
-  // }
 
   const searchUser = (username) => {
     const sanitizeSearch = username.trim().toLowerCase();
@@ -73,6 +64,7 @@ const Home = () => {
   return (
     <div className="min-h-screen  flex justify-center items-center text-slate-100 p-5 sm:p-0">
       <div className=" w-full sm:w-1/2 sm:max-w-3xl bg-gray-800 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-40 border border-gray-700 px-5 py-3 flex flex-col gap-5">
+      <Header />
         <div>
           <SidebarSearch searchUser={searchUser} />
         </div>

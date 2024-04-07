@@ -36,10 +36,10 @@ export const addFriend = async (req, res, next) => {
 
         toUser.friendRequests.push(currentUserId);
         await toUser.save();
-        
+
         const toUserSocketId = getReceiverSocketId(toUserId);
-        if(toUserSocketId) {
-            io.to(toUserSocketId).emit('friend-request' ,{ message: `You have a new friend request from ${currentUser.fullname}`, user : toUser });
+        if (toUserSocketId) {
+            io.to(toUserSocketId).emit('friend-request', { message: `You have a new friend request from ${currentUser.fullname}`, user: toUser });
         }
 
         res.status(200).json({ message: `Friend requests has sent to ${toUser.fullname}` });
@@ -68,11 +68,11 @@ export const acceptFriend = async (req, res, next) => {
         await Promise.all[currentUser.save(), toUser.save()];
 
         const fromUserSocketId = getReceiverSocketId(fromUserId);
-        if(fromUserSocketId) {
-            io.to(fromUserSocketId).emit('accept-friend' ,{ message: `${currentUser.fullname} has accepted your friend request.`, user : toUser });
+        if (fromUserSocketId) {
+            io.to(fromUserSocketId).emit('accept-friend', { message: `${currentUser.fullname} has accepted your friend request.`, user: toUser });
         }
 
-        res.status(200).json({ message: `You've accpeted friend request from ${toUser.fullname}`, user : currentUser });
+        res.status(200).json({ message: `You've accpeted friend request from ${toUser.fullname}`, user: currentUser });
     } catch (error) {
         next(error);
     }
@@ -103,6 +103,10 @@ export const updateUser = async (req, res, next) => {
             }, { new: true }
         ).select("-password");
         // const { password:pass, ...user } = updatedUser._doc
+
+
+        io.emit('update-user', updatedUser);
+
         res.status(200).json(updatedUser);
     } catch (error) {
         next(error)
@@ -125,10 +129,10 @@ export const deleteUser = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
     try {
-        const user = await User.find({username : req.params.username}).select('-password');
+        const user = await User.find({ username: req.params.username }).select('-password');
         // { _id: { $ne: currentUserId } }
 
-        if(user.length === 0) {
+        if (user.length === 0) {
             return next(errorHandler(404, 'User not found.'));
         }
 
