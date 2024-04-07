@@ -34,6 +34,7 @@ export const addFriend = async (req, res, next) => {
 
         toUser.friendRequests.push(currentUserId);
         await toUser.save();
+        
 
         res.status(200).json({ message: `Friend requests has sent to ${toUser.fullname}` });
     } catch (error) {
@@ -57,9 +58,11 @@ export const acceptFriend = async (req, res, next) => {
         const indexOfFriReq = currentUser.friendRequests.indexOf(fromUserId);
         currentUser.friendRequests.splice(indexOfFriReq, 1);
         currentUser.friends.push(fromUserId);
-        await currentUser.save();
+        toUser.friends.push(currentUserId);
+        await Promise.all[currentUser.save(), toUser.save()];
 
-        res.status(200).json({ messages: `You've accpeted friend request from ${toUser.fullname}` });
+
+        res.status(200).json({ message: `You've accpeted friend request from ${toUser.fullname}`, user : currentUser });
     } catch (error) {
         next(error);
     }

@@ -31,7 +31,6 @@ const useSignin = () => {
 			if (data.success === false) {
                 throw new Error(data.message);
             }
-
 			localStorage.setItem("chat-user", JSON.stringify(data));
 			setAuthUser(data);
             navigate('/')

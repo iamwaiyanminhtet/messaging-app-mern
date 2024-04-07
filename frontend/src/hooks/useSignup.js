@@ -27,7 +27,6 @@ const useSignup = () => {
             localStorage.setItem('chat-user', JSON.stringify(data))
             setAuthUser(data);
             navigate('/');
-
         } catch (error) {
             toast.error(error.message, {
                 position: "top-center",

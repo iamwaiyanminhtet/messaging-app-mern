@@ -30,6 +30,8 @@ export const signup = async (req, res, next) => {
             profilePic: gender === "male" ? pfpBoy : pfpGirl
         });
 
+        generateTokenAndCookie(user._id, res);
+
         res.status(201).json({
             _id : user._id,
             fullname : user.fullname,

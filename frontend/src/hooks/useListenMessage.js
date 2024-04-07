@@ -12,7 +12,11 @@ const useListenMessages = () => {
         newMessage.shouldShake = true;
         const notification = new Audio(incomingMessage);
         notification.play();
-        setMessages([...messages, newMessage])
+        if(messages?.length > 0) {
+          setMessages([...messages, newMessage])
+        } else {
+          setMessages([newMessage])
+        }
     })
 
     return () => socket?.off('newMessage')
