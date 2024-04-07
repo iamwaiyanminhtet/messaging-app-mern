@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 
 import Conversation from "../models/conversation.model.js"
 import Message from "../models/message.model.js"
+import User from "../models/user.model.js"
 import { errorHandler } from "../utils/custom-error.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 
@@ -40,7 +41,7 @@ export const sendMessage = async (req, res, next) => {
 
         const receiverSocketId = getReceiverSocketId(receiverId)
         if(receiverSocketId) {
-            io.to(receiverSocketId).emit('newMessage', newMessage);
+            io.to(receiverSocketId).emit('newMessage',  newMessage );
         }
 
         res.status(201).json(newMessage);
@@ -107,6 +108,11 @@ export const deleteMessage = async (req, res, next) => {
             return next(errorHandler(401, "You are not allowed to delete this message"));
         }
 
+        const receiverSocketId = getReceiverSocketId(messageToDelete.receiverId);
+        if(receiverSocketId) {
+            io.to(receiverSocketId).emit('delete-message' , messageToDelete);
+        }
+
         const message = await Message.findByIdAndDelete(messageId);
         res.status(200).json(message);
     } catch (error) {
@@ -128,6 +134,11 @@ export const deleteConversation = async (req, res, next) => {
         conversation.messages.forEach(async (msgId) => {
             await Message.findByIdAndDelete(msgId);
         })
+
+        const receiverSocketId = getReceiverSocketId(conversation.participants[1]);
+        if(receiverSocketId) {
+            io.to(receiverSocketId).emit('delete-convo');
+        }
 
         res.status(200).json({message : "Conversation has been deleted"})
 

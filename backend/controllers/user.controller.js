@@ -128,6 +128,10 @@ export const getUser = async (req, res, next) => {
         const user = await User.find({username : req.params.username}).select('-password');
         // { _id: { $ne: currentUserId } }
 
+        if(user.length === 0) {
+            return next(errorHandler(404, 'User not found.'));
+        }
+
         res.status(200).json(user);
     } catch (error) {
         next(error);

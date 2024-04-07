@@ -1,12 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef } from "react";
 import Message from "./Message"
-import useListenMessages, { useListenUpdateMessage } from "../../hooks/useListenMessage";
+import useListenMessages, { useListenDeleteConvo, useListenDeleteMessage, useListenUpdateMessage } from "../../hooks/useListenMessage";
 
 const Messages = ({ loading, user, messages }) => {
 
   useListenMessages();
   useListenUpdateMessage();
+  useListenDeleteMessage();
+  useListenDeleteConvo();
   const lastMessageRef = useRef();
 
   useEffect(() => {

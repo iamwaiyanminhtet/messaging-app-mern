@@ -1,7 +1,9 @@
 import { useEffect } from "react";
-import { useSocketContext } from "../context/SocketContext"; 
+import { useSocketContext } from "../context/SocketContext";
 import useUsers from "../zustand/useUsers"
-import incomingMessage from "../assets/iphone_ding.mp3"
+import incomingMessage from "../assets/iphone_ding.mp3";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const useListenMessages = () => {
   const { socket } = useSocketContext();
@@ -9,14 +11,14 @@ const useListenMessages = () => {
 
   useEffect(() => {
     socket?.on('newMessage', (newMessage) => {
-        newMessage.shouldShake = true;
-        const notification = new Audio(incomingMessage);
-        notification.play();
-        if(messages?.length > 0) {
-          setMessages([...messages, newMessage])
-        } else {
-          setMessages([newMessage])
-        }
+      newMessage.shouldShake = true;
+      const notification = new Audio(incomingMessage);
+      notification.play();
+      if (messages?.length > 0) {
+        setMessages([...messages, newMessage])
+      } else {
+        setMessages([newMessage])
+      }
     })
 
     return () => socket?.off('newMessage')
@@ -36,5 +38,36 @@ const useListenUpdateMessage = () => {
   }, [socket, messages, setMessages])
 }
 
-export { useListenUpdateMessage }
+const useListenDeleteMessage = () => {
+  const { socket } = useSocketContext();
+  const { messages, setMessages } = useUsers();
+
+  useEffect(() => {
+    socket?.on('delete-message', (messageToDelete) => {
+      setMessages(messages.filter(msg => msg._id !== messageToDelete._id));
+    })
+
+    return () => socket?.off('delete-message')
+  }, [socket, messages, setMessages])
+}
+
+const useListenDeleteConvo = () => {
+  const { socket } = useSocketContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    socket?.on('delete-convo', () => {
+      navigate('/')
+      toast.info('Conversation has been deleted by other user.', {
+        position: "top-center",
+        autoClose: 3000,
+        theme: "dark",
+        draggable: true
+    });
+    })
+    return () => socket?.off('delete-convo')
+  }, [socket, navigate])
+}
+
+export { useListenUpdateMessage, useListenDeleteMessage, useListenDeleteConvo }
 export default useListenMessages

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { BsSend } from "react-icons/bs";
 import { FaXmark } from "react-icons/fa6";
 import useUpdateMessage from "../../hooks/useUpdateMesssage";
+import useDeleteMessage from "../../hooks/useDeleteMessage";
 
 const Message = ({ message, user }) => {
     dayjs.extend(relativeTime);
@@ -23,11 +24,17 @@ const Message = ({ message, user }) => {
     const [messageInput, setMessageInput] = useState(message.message);
     const { loading, updateMessage } = useUpdateMessage();
 
+    const { deleteMessage } = useDeleteMessage();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(messageInput == message.message) setIsEditing(false);
         await updateMessage(messageInput, message._id);
         setIsEditing(false);
+    }
+
+    const handleDeleteMessage = async() => {
+        await deleteMessage(message._id)
     }
 
     return (
@@ -51,8 +58,7 @@ const Message = ({ message, user }) => {
                         onChange={(e) => setMessageInput(e.target.value)}
                     ></textarea>
                     <button type='submit' className='absolute inset-y-0 end-0 flex items-center pe-8 '>
-                        {/* <div className="loading loading-spinner"></div> */}
-                        <BsSend/>
+                        {loading ? <div className="loading loading-spinner"></div> : <BsSend/>}
                     </button>
                     <button type='button' className='absolute inset-y-0 end-0 flex items-center pe-2'>
                         <FaXmark size={18} onClick={() => setIsEditing(false)} />
@@ -69,7 +75,7 @@ const Message = ({ message, user }) => {
                 myMessage && 
                 <>
                 <span className="text-sky-500 font-bold cursor-pointer" onClick={() => setIsEditing(true)} >Edit</span>
-                <span className="text-red-500 font-bold" >Delete</span>
+                <span className="text-red-500 font-bold cursor-pointer" onClick={handleDeleteMessage} >Delete</span>
                 </>
                }
             </div>
