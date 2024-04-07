@@ -83,7 +83,13 @@ export const updateMessage = async (req, res, next) => {
         }
 
         messageToUpdate.message = message;
+        messageToUpdate.isEdited = true;
         await messageToUpdate.save();
+
+        const receiverSocketId = getReceiverSocketId(messageToUpdate.receiverId);
+        if(receiverSocketId) {
+            io.to(receiverSocketId).emit('update-message' , messageToUpdate);
+        }
 
         res.status(200).json(messageToUpdate);
     } catch (error) {

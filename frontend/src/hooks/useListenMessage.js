@@ -23,4 +23,18 @@ const useListenMessages = () => {
   }, [socket, messages, setMessages])
 }
 
+const useListenUpdateMessage = () => {
+  const { socket } = useSocketContext();
+  const { messages, setMessages } = useUsers();
+
+  useEffect(() => {
+    socket?.on('update-message', (messageToUpdate) => {
+      setMessages(messages.map(msg => msg._id === messageToUpdate._id ? messageToUpdate : msg));
+    })
+
+    return () => socket?.off('update-message')
+  }, [socket, messages, setMessages])
+}
+
+export { useListenUpdateMessage }
 export default useListenMessages
