@@ -1,4 +1,4 @@
-# Wia Blog
+# Messaging app
 A typical messaging site with MERN and socket.io
 
 ## Features
